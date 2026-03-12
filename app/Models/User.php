@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\LogsActivity;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'system_role',
     ];
 
     /**
@@ -44,5 +46,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isSystemAdmin(){
+        return $this->system_role === 'adminstrator';
+    }
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class)
+            ->using(TeamUser::class)
+            ->withPivot('role', 'joined_at')
+            ->withTimestamps();
+    }
+
+    public function assignedTasks(){
+        return $this->hasMany(Task::class,'assigned_user_id');
+    }
+
+     public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

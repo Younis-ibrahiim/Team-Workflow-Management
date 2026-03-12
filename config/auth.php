@@ -112,4 +112,30 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification Timeout
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the number of minutes that the email verification
+    | link will be considered valid. After this time, the link will expire
+    | and the user will need to request a new one.
+    |
+    */
+
+    'verification' => [
+        'expired' => (int) env('AUTH_VERIFICATION_EXPIRE', 60),
+    ],
+
+/*
+    |--------------------------------------------------------------------------
+    | Login Throttling
+    |--------------------------------------------------------------------------
+    */
+
+    'login_throttle' => [
+        'max_attempts' => (int) env('AUTH_LOGIN_MAX_ATTEMPTS', 5),
+        'decay_minutes' => (int) env('AUTH_LOGIN_DECAY_MINUTES', 1),
+    ],
+
 ];

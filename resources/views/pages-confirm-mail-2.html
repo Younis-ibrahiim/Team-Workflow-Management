@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{ __('auth.verify_email_title') }} | Hyper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+
+    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="light-style" />
+
+    @if (app()->getLocale() === 'ar')
+        <link href="{{ asset('assets/css/rtl.css') }}" rel="stylesheet" id="rtl-style">
+    @endif
+
+    <link href="{{ asset('assets/css/app-dark.min.css') }}" rel="stylesheet" type="text/css" id="dark-style" />
+</head>
+
+<body class="authentication-bg pb-0">
+
+    <div class="auth-fluid">
+        <div class="auth-fluid-form-box">
+            <div class="align-items-center d-flex h-100">
+                <div class="card-body">
+
+                    <div class="auth-brand text-center text-lg-end">
+                        <a href="#" class="logo-dark">
+                            <span><img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="18"></span>
+                        </a>
+                    </div>
+
+                    <div class="text-center m-auto">
+                        <img src="{{ asset('assets/images/mail_sent.svg') }}" alt="mail sent image" height="64" />
+                        <h4 class="text-dark-50 text-center mt-4 fw-bold">{{ __('auth.check_email') }}</h4>
+
+                        {{-- Flash Message for Resend --}}
+                        @if (session('status') == 'verification-link-sent')
+                            <div class="alert alert-success border-0" role="alert">
+                                {{ __('auth.verify_email_sent') }}
+                            </div>
+                        @endif
+
+                        <p class="text-muted mb-4">
+                            {!! __('auth.verify_email_text', ['email' => '<b>' . auth()->user()->email . '</b>']) !!}
+                        </p>
+                    </div>
+
+                    <form method="POST" action="{{ route('verification.send') }}">
+                        @csrf
+                        <div class="mb-3 d-grid text-center">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="mdi mdi-email-sync me-1"></i> {{ __('auth.resend_verification_email') }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <form method="POST" action="{{ route('logout') }}" class="text-center">
+                        @csrf
+                        <button type="submit" class="btn btn-link text-muted">
+                            {{ __('auth.logout') }}
+                        </button>
+                    </form>
+
+                    <footer class="footer footer-alt">
+                        <p class="text-muted">{{ date('Y') }} © Hyper - Coderthemes.com</p>
+                    </footer>
+
+                </div> </div> </div>
+        <div class="auth-fluid-right text-center">
+            <div class="auth-user-testimonial">
+                <h2 class="mb-3">{{ __('auth.testimonial_title') }}</h2>
+                <p class="lead"><i class="mdi mdi-format-quote-open"></i> {{ __('auth.testimonial_text') }} <i class="mdi mdi-format-quote-close"></i>
+                </p>
+                <p>- Hyper Admin User</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+    <script src="{{ asset('assets/js/app.min.js') }}"></script>
+
+</body>
+</html>
